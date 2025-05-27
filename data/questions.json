@@ -1,0 +1,33 @@
+[
+  {
+    "type": "multiple_choice",
+    "question": "Welcher Planet ist der größte in unserem Sonnensystem?",
+    "choices": ["Erde", "Mars", "Jupiter", "Venus"],
+    "correct": 2,
+    "media": "space/jupiter.jpg",
+    "category": "Astronomie",
+    "difficulty": "easy",
+    "team_mode": "team",
+    "timer": 20
+  },
+  {
+    "type": "estimate",
+    "question": "Wie viele Liter Blut hat ein durchschnittlicher erwachsener Mensch?",
+    "answer": 5,
+    "tolerance_percent": 10,
+    "unit": "Liter",
+    "media": "medizin/blut.jpg",
+    "category": "Biologie",
+    "difficulty": "medium",
+    "team_mode": "individual"
+  },
+  {
+    "type": "boolean",
+    "question": "Schlafen Delfine mit nur einer Gehirnhälfte?",
+    "answer": true,
+    "media": "tiere/delfin.png",
+    "category": "Tiere",
+    "difficulty": "hard",
+    "team_mode": "team"
+  }
+]
