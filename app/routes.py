@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, session, jsonify, Blueprint, url_for
+from flask import Flask, render_template, request, redirect, send_from_directory, session, jsonify, Blueprint, url_for
 from utils.game_state import GameState
+import os
 
 app_bp = Blueprint("game", __name__)
 
@@ -22,6 +23,11 @@ def start_game():
     game.reset_game()
     return redirect(url_for("game.game_view"))
 
+MEDIA_DIR = os.path.join(app_bp.root_path, '..', 'data', 'media')
+
+@app_bp.route('/media/<path:filename>')
+def media_file(filename):
+    return send_from_directory(MEDIA_DIR, filename)
 
 # ------ In Game ----- #
 @app_bp.route("/game")

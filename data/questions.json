@@ -4,7 +4,7 @@
     "type": "multiple_choice",
     "question": "Was ist die Hauptstadt von Frankreich?",
     "points": 100,
-    "media": "media/frankreich.jpg",
+    "media": "frankreich.png",
     "options": ["Paris", "Madrid", "Berlin", "Rom"],
     "answer": 0
   },

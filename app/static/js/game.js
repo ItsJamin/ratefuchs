@@ -1,9 +1,13 @@
+const pressedKeys = new Set();
+let is_revealed = false;
+
 document.addEventListener("keydown", async (e) => {
-    const isShift = e.shiftKey;
-    const key = e.key;
+    pressedKeys.add(e.code);
+
+    const isShift = pressedKeys.has("ShiftLeft") || pressedKeys.has("ShiftRight");
 
     // Reveal answer with Enter
-    if (key === "Enter") {
+    if (e.code === "Enter" && !is_revealed) {
         const res = await fetch("/reveal_answer");
         const data = await res.json();
 
@@ -11,7 +15,6 @@ document.addEventListener("keydown", async (e) => {
         const answer = data.answer;
 
         if (answerType === "multiple_choice") {
-            // Highlight correct answer by index
             const correctIndex = answer;
             document.querySelectorAll(".answer").forEach((el, i) => {
                 if (i === correctIndex) {
@@ -20,20 +23,7 @@ document.addEventListener("keydown", async (e) => {
                     el.classList.add("wrong");
                 }
             });
-        } else if (answerType === "guess") {
-            // Show answer prominently as text
-            let el = document.getElementById("answer-display");
-            if (!el) {
-                el = document.createElement("div");
-                el.id = "answer-display";
-                el.style.marginTop = "30px";
-                el.style.fontSize = "2rem";
-                el.style.color = "#26A69A";
-                document.querySelector(".question-box")?.appendChild(el);
-            }
-            el.textContent = "Richtige Antwort: " + answer.toLocaleString();  // formatiert große Zahlen
         } else {
-            // Fallback: einfach Antworttext zeigen
             let el = document.getElementById("answer-display");
             if (!el) {
                 el = document.createElement("div");
@@ -43,41 +33,49 @@ document.addEventListener("keydown", async (e) => {
                 el.style.color = "#26A69A";
                 document.querySelector(".question-box")?.appendChild(el);
             }
-            el.textContent = "Antwort: " + answer;
+            el.textContent = "Richtige Antwort: " + (
+                typeof answer === "number" ? answer.toLocaleString() : answer
+            );
+        }
+        is_revealed = true;
+    }
+
+    // Digit1–Digit9 → Score update (only after reveal)
+    if (e.code.startsWith("Digit") && is_revealed) {
+        const digit = parseInt(e.code.replace("Digit", ""));
+        if (digit >= 1 && digit <= 9) {
+            const delta = isShift ? -100 : 100;
+
+            const res = await fetch("/update_score", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ player_id: digit, delta: delta })
+            });
+
+            const data = await res.json();
+            const scoreEl = document.getElementById(`score-${digit}`);
+            scoreEl.textContent = data.player.score;
+
+            scoreEl.classList.add("score-update");
+            setTimeout(() => scoreEl.classList.remove("score-update"), 1000);
         }
     }
 
-
-    // Number keys 1–9 → Score update
-    if (/^[1-9]$/.test(key)) {
-        const playerId = parseInt(key);
-        const delta = isShift ? -100 : 100;
-
-        const res = await fetch("/update_score", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ player_id: playerId, delta: delta })
-        });
-
-        const data = await res.json();
-        const scoreEl = document.getElementById(`score-${playerId}`);
-        scoreEl.textContent = data.player.score;
-
-        // Optional: Add visual score animation
-        scoreEl.classList.add("score-update");
-        setTimeout(() => scoreEl.classList.remove("score-update"), 1000);
-    }
-
-    // N → nächste Frage
-    if (key === "n") {
+    // N → next question
+    if (e.code === "KeyN") {
         const res = await fetch("/next_question", { method: "POST" });
         const data = await res.json();
         if (data.success) {
-            window.location.reload();  // reload to show next question
+            is_revealed = false;
+            window.location.reload();
         } else {
             alert("Keine weiteren Fragen.");
         }
     }
+});
+
+document.addEventListener("keyup", (e) => {
+    pressedKeys.delete(e.code);
 });
