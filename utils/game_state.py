@@ -8,6 +8,9 @@ class GameState:
         self.players = []  # List of dicts: {id, name, score}
         self.current_question_index = 0
         self.questions = self._load_questions(question_file_path)
+        
+        for i, question in enumerate(self.questions):
+            question["id"] = i
 
     def _load_questions(self, path):
         with open(path, "r", encoding="utf-8") as f:
