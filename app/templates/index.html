@@ -1,0 +1,22 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Ratefuchs | Start</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="start-screen">
+        <h1>Willkommen bei <span class="orange">Ratefuchs</span></h1>
+        <form action="/start_game" method="POST">
+            <div id="player-inputs">
+                {% for i in range(1, 6) %}
+                <input type="text" name="player{{ i }}" placeholder="Spieler {{ i }}" class="player-name">
+                {% endfor %}
+            </div>
+            <button type="submit" class="start-button">Spiel starten</button>
+        </form>
+    </div>
+</body>
+</html>
