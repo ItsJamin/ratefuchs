@@ -6,11 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="question-box">
-        <h1 id="question-text">{{ question["question"] }}</h1>
-        <p class="points">Punkte: {{ question["points"] }}</p>
-    </div>
 
+   <div class="main-container">
     {% if question["media"] %}
     <div class="media-box">
         {% if question["media"].endswith('.jpg') or question["media"].endswith('.png') %}
@@ -21,13 +18,24 @@
     </div>
     {% endif %}
 
-    {% if question["type"] == "multiple_choice" %}
-    <div class="answers">
-        {% for option in question["options"] %}
-        <div class="answer" data-index="{{ loop.index0 }}">{{ option }}</div>
-        {% endfor %}
+        <div class="right-content">
+            <div class="question-box">
+                <h1 id="question-text">{{ question["question"] }}</h1>
+                <p class="points">Punkte: {{ question["points"] }}</p>
+            </div>
+
+            {% if question["type"] == "multiple_choice" %}
+            <div class="answers">
+                {% for option in question["options"] %}
+                <div class="answer" data-index="{{ loop.index0 }}">{{ option }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Antwortanzeige für guess/sonstiges -->
+            <div id="answer-display"></div>
+        </div>
     </div>
-    {% endif %}
 
     <div class="scoreboard">
         {% for player in players %}

@@ -5,6 +5,15 @@ body {
     text-align: center;
     margin: 0;
     padding: 0;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+::-webkit-scrollbar {
+    display: none !important;
 }
 
 h1, h2 {
@@ -12,26 +21,48 @@ h1, h2 {
     margin-bottom: 10px;
 }
 
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px;
+    gap: 60px;
+    overflow-y: auto;
+}
+
+/* Linke Seite: Media */
+.media-box {
+    flex: 0 0 auto;
+    max-width: 30%;
+}
+
+.media-box img, .media-box audio {
+    max-width: 100%;
+    border: 5px solid #FF6F00;
+    border-radius: 10px;
+}
+
+/* Rechte Seite: Frage & Antworten */
+.right-content {
+    flex: 1;
+    text-align: left;
+    max-width: 800px;
+}
+
 .question-box {
-    margin-top: 40px;
+    margin-bottom: 30px;
     font-size: 2rem;
     font-weight: bold;
     color: #FFA040;
 }
 
-.media-box img {
-    max-width: 60%;
-    margin-top: 20px;
-    border: 5px solid #FF6F00;
-    border-radius: 10px;
-}
-
 .answers {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Zwei Spalten */
     gap: 20px;
+    margin-top: 20px;
 }
 
 .answer {
@@ -43,6 +74,7 @@ h1, h2 {
     cursor: pointer;
     font-size: 1.2rem;
     transition: all 0.3s ease;
+    text-align: center;
 }
 
 .answer:hover {
@@ -63,15 +95,24 @@ h1, h2 {
     border-color: #FF8A80;
 }
 
+/* Antworttext für Schätzfragen */
+#answer-display {
+    margin-top: 30px;
+    font-size: 2rem;
+    color: #26A69A;
+    font-weight: bold;
+}
+
+/* Fixiertes Scoreboard */
 .scoreboard {
     display: flex;
     justify-content: center;
     gap: 40px;
-    margin-top: 50px;
     padding: 20px;
     background-color: #1B263B;
     border-top: 3px solid #FF6F00;
     flex-wrap: wrap;
+    margin-top: 40px; /* Abstand nach oben, damit es nicht klebt */
 }
 
 .player {
