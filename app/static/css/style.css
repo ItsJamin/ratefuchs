@@ -204,3 +204,20 @@ h1, h2 {
     transform: translateY(-30px);
   }
 }
+
+/* Typing effect */
+.typing {
+    border-right: 2px solid #0D1B2A;
+    animation: blinkCaret 0.75s step-end infinite;
+}
+
+
+@keyframes typingAnim {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blinkCaret {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: #0D1B2A; }
+}

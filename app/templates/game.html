@@ -20,7 +20,7 @@
 
         <div class="right-content">
             <div class="question-box">
-                <h1 id="question-text">{{ question["question"] }}</h1>
+                <h1 id="question-text" data-question="{{ question['question'] | e }}"></h1>
                 <p class="points">Punkte: {{ question["points"] }}</p>
             </div>
 
