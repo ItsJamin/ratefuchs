@@ -104,11 +104,24 @@ document.addEventListener("keydown", async (e) => {
         const data = await res.json();
         await revealAnswerAndUpdateUI(data);
     }
+    else if (e.code === "Enter" && is_revealed) {
+        e.preventDefault();
+        const res = await fetch("/next_question", { method: "POST" });
+        const data = await res.json();
+
+        if (data.success) {
+            is_revealed = false;
+            window.location.reload();
+        } else {
+            alert("No more questions.");
+        }
+    }
 
     if (e.code.startsWith("Digit") && is_revealed) {
         const digit = parseInt(e.code.replace("Digit", ""));
         if (digit >= 1 && digit <= 9) {
-            const delta = isShift ? -100 : 100;
+            points = document.getElementById("points-to-get").textContent;
+            const delta = isShift ? -points : points;
 
             const res = await fetch("/update_score", {
                 method: "POST",
@@ -123,19 +136,6 @@ document.addEventListener("keydown", async (e) => {
 
             showFloatingDelta(digit, delta);
             pulseScore(digit, delta);
-        }
-    }
-
-    if (e.code === "Space" && is_revealed) {
-        e.preventDefault();
-        const res = await fetch("/next_question", { method: "POST" });
-        const data = await res.json();
-
-        if (data.success) {
-            is_revealed = false;
-            window.location.reload();
-        } else {
-            alert("No more questions.");
         }
     }
 });

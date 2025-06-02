@@ -6,35 +6,38 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <div class="main-container">
+        <div class="content-wrapper">
 
-   <div class="main-container">
-    {% if question["media"] %}
-    <div class="media-box">
-        {% if question["media"].endswith('.jpg') or question["media"].endswith('.png') %}
-        <img src="{{ url_for('game.media_file', filename=question['media']) }}" alt="media">
-        {% elif question["media"].endswith('.mp3') %}
-        <audio controls src="{{ url_for('game.media_file', filename=question['media']) }}"></audio>
-        {% endif %}
-    </div>
-    {% endif %}
-
-        <div class="right-content">
-            <div class="question-box">
-                <h1 id="question-text" data-question="{{ question['question'] | e }}"></h1>
-                <p class="points">Punkte: {{ question["points"] }}</p>
-            </div>
-
-            {% if question["type"] == "multiple_choice" %}
-            <div class="answers">
-                {% for option in question["options"] %}
-                <div class="answer" data-index="{{ loop.index0 }}">{{ option }}</div>
-                {% endfor %}
+            {% if question["media"] %}
+            <div class="media-box">
+                {% if question["media"].endswith('.jpg') or question["media"].endswith('.png') %}
+                <img src="{{ url_for('game.media_file', filename=question['media']) }}" alt="media">
+                {% elif question["media"].endswith('.mp3') %}
+                <audio controls src="{{ url_for('game.media_file', filename=question['media']) }}"></audio>
+                {% endif %}
             </div>
             {% endif %}
-
-            <!-- Antwortanzeige für guess/sonstiges -->
-            <div id="answer-display"></div>
         </div>
+        <div class="right-content">
+            <h1 id="question-text">{{ question['question'] | e }}</h1>
+        </div>
+        <div class="question-box">
+                    <p class="points"><span class="points" id="points-to-get">{{ question["points"] }}</span><span>&#129418;</span></p>
+                </div>
+
+                {% if question["type"] == "multiple_choice" %}
+                <div class="answers">
+                    {% set letters = ["A", "B", "C", "D", "E", "F", "G", "H"] %}
+                    {% for option in question["options"] %}
+                    <div class="answer" data-index="{{ loop.index0 }}">
+                        <strong>{{ letters[loop.index0] }}.</strong> {{ option }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div id="answer-display"></div>
     </div>
 
     <div class="scoreboard">
@@ -44,8 +47,8 @@
             <span class="score" id="score-{{ player['id'] }}">
                 <span class="score-value">{{ player['score'] }}</span>
             </span>
+            <span>&#129418;</span>
         </div>
-
         {% endfor %}
     </div>
 
